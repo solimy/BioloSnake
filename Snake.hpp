@@ -19,6 +19,7 @@ namespace BioloSnake {
     void turnLeft();
     void turnRight();
     void sense(const int (&map)[mapSizeY][mapSizeX]);
+    void sense(const std::list<Food>& foods);
     void step();
     void feed();
     void kill();
@@ -36,6 +37,8 @@ namespace BioloSnake {
     bool m_alive;
     Brain* m_brain;
     SimpleEye* m_eye;
+    FoodSensor* m_fsLeft;
+    FoodSensor* m_fsRight;
     int m_food;
     int m_age;
     bool m_fork;

@@ -11,13 +11,6 @@
 #include "Brain.hpp"
 #include "Snake.hpp"
 
-struct Food {
-  Food(int x, int y) {this->x = x; this->y = y; eaten = false;};
-  int x;
-  int y;
-  bool eaten;
-};
-
 void display(int (&map)[mapSizeY][mapSizeX], std::list<BioloSnake::Snake*>& snakes, std::list<Food>& foods, bool disp) {
   std::memset(map, ' ', sizeof(map));
   for (auto& food : foods) {

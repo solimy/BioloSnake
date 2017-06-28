@@ -4,6 +4,15 @@
 #include <list>
 #include <vector>
 
+#include "Snake.hpp"
+
+struct Food {
+  Food(int x, int y) {this->x = x; this->y = y; eaten = false;};
+  int x;
+  int y;
+  bool eaten;
+};
+
 namespace BioloSnake {
 
   class SensorHub;
@@ -105,8 +114,6 @@ namespace BioloSnake {
       }
     }
   private:
-    void sense() {}
-
     double getDanger(const int (&map)[mapSizeY][mapSizeX], int x, int y) {
       //x = x >= mapSizeX ? 0 : x < 0 ? mapSizeX-1 : x;
       //y = y >= mapSizeY ? 0 : y < 0 ? mapSizeY-1 : y;
@@ -114,6 +121,20 @@ namespace BioloSnake {
       else if (map[y][x]=='#') return -1.0;
       else if (map[y][x]=='.') return 1.0;
       else return 0.0;
+    }
+  };
+
+  class FoodSensor : public Sensor {
+    
+  public:
+    FoodSensor(std::vector<double>& inputsHub) : Sensor(1, inputsHub) {
+    }
+    void sense(int x, int y, int direction, const std::list<Food>& foods) {
+      double i = ((foods.front().x - x)*(foods.front().x - x)) + ((foods.front().y - y)*(foods.front().y - y));
+      m_sensed[m_start_index] = i;
+      for (auto& food : foods)
+	if ((i = ((food.x - x)*(food.x - x)) + ((food.y - y)*(food.y - y))) < m_sensed[m_start_index])
+	  m_sensed[m_start_index] = i;
     }
   };
 };

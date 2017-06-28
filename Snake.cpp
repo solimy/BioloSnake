@@ -4,6 +4,8 @@
 
 BioloSnake::Snake::~Snake() {
   delete(m_eye);
+  delete(m_fsLeft);
+  delete(m_fsRight);
   delete(m_brain);
 }
 
@@ -14,6 +16,8 @@ BioloSnake::Snake::Snake(int x, int y) {
   m_grow = false;
   m_alive = true;
   m_eye = new SimpleEye(m_inputs);
+  m_fsLeft = new FoodSensor(m_inputs);
+  m_fsRight = new FoodSensor(m_inputs);
   m_outputs.push_back(0.0);
   m_outputs.push_back(0.0);
   m_brain = new Brain(m_inputs.size(), m_outputs.size());
@@ -30,6 +34,8 @@ BioloSnake::Snake::Snake(int x, int y, const BioloSnake::Brain& brain) {
   m_grow = false;
   m_alive = true;
   m_eye = new SimpleEye(m_inputs);
+  m_fsLeft = new FoodSensor(m_inputs);
+  m_fsRight = new FoodSensor(m_inputs);
   m_outputs.push_back(0.0);
   m_outputs.push_back(0.0);
   m_brain = new Brain(m_inputs.size(), m_outputs.size());
@@ -51,7 +57,28 @@ void BioloSnake::Snake::turnRight() {
 void BioloSnake::Snake::sense(const int (&map)[mapSizeY][mapSizeX]) {
   m_eye->sense(map, m_direction, m_body.front()[0], m_body.front()[1]);
 }
-  
+
+void BioloSnake::Snake::sense(const std::list<Food>& foods) {
+  switch (m_direction) {
+  case 0:
+    m_fsLeft->sense(m_body.front()[0], m_body.front()[1]-1, m_direction, foods);
+    m_fsRight->sense(m_body.front()[0], m_body.front()[1]+1, m_direction, foods);
+    break;
+  case 1:
+    m_fsLeft->sense(m_body.front()[0]-1, m_body.front()[1], m_direction, foods);
+    m_fsRight->sense(m_body.front()[0]+1, m_body.front()[1], m_direction, foods);
+    break;
+  case 2:
+    m_fsLeft->sense(m_body.front()[0], m_body.front()[1]+1, m_direction, foods);
+    m_fsRight->sense(m_body.front()[0], m_body.front()[1]-1, m_direction, foods);
+    break;
+  case 3:
+    m_fsLeft->sense(m_body.front()[0]+1, m_body.front()[1], m_direction, foods);
+    m_fsRight->sense(m_body.front()[0]-1, m_body.front()[1], m_direction, foods);
+    break;
+  }
+}
+
 void BioloSnake::Snake::step() {
   if (--m_food == 0) {
     kill();
