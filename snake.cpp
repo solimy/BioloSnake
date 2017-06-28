@@ -12,8 +12,8 @@
 #define mapSizeX 100
 #define mapSizeY 50
 
-const static double mutationRate = 0.1;
-const static double mutationCoef = 0.4;
+const static double mutationRate = 0.1;//0.1
+const static double mutationCoef = 0.4;//0.4
 
 class Brain : public NeuralNetwork::MLP {
  public:
@@ -28,7 +28,17 @@ class Brain : public NeuralNetwork::MLP {
     addNeuron(0);
     addNeuron(0);
     addNeuron(0);
+    addNeuron(0);
+    addNeuron(0);
+    addNeuron(0);
+    addNeuron(0);
+    addNeuron(0);
 
+    addNeuron(1);
+    addNeuron(1);
+    addNeuron(1);
+    addNeuron(1);
+    addNeuron(1);
     addNeuron(1);
     addNeuron(1);
     addNeuron(1);
@@ -59,10 +69,8 @@ class Brain : public NeuralNetwork::MLP {
 	  for (unsigned int neuronOut = 0, neuronOutMax = m_activation[layer+1].size();
 	       neuronOut < neuronOutMax; ++neuronOut)
 	    {
-	      if (std::rand()%(int)(mutationRate*100) == 0)
-		m_weights[layer][neuronIn][neuronOut] += (double)(std::rand()%(int)(mutationCoef*100))/100;
-	      else if (std::rand()%(int)(mutationRate*100) == 1)
-		m_weights[layer][neuronIn][neuronOut] -= (double)(std::rand()%(int)(mutationCoef*100))/100;
+	      if (std::rand()%(int)(mutationRate*100) < mutationRate*100)
+		m_weights[layer][neuronIn][neuronOut] += (rand()%2 == 0 ? -1 : 1)*((double)(std::rand()%(int)(mutationCoef*100))/100);
 	    }
 	}
     }
@@ -89,10 +97,15 @@ public:
     m_inputs.push_back(0.0);
     m_inputs.push_back(0.0);
     m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
     m_outputs.push_back(0.0);
     m_outputs.push_back(0.0);
     m_brain.mutate();
-    m_food = 50;
+    m_food = 20;
     m_age = 0;
     m_fork = false;
   }
@@ -113,11 +126,16 @@ public:
     m_inputs.push_back(0.0);
     m_inputs.push_back(0.0);
     m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
+    m_inputs.push_back(0.0);
     m_outputs.push_back(0.0);
     m_outputs.push_back(0.0);
     m_brain = brain;
     m_brain.mutate();
-    m_food = 50;
+    m_food = 20;
     m_age = 0;
     m_fork = false;
   }
@@ -149,6 +167,11 @@ public:
       m_inputs[7] = getDanger(map, x+2, y);
       m_inputs[8] = getDanger(map, x+2, y-1);
       m_inputs[9] = getDanger(map, x+2, y-2);
+      m_inputs[10] = getDanger(map, x+3, y+2);
+      m_inputs[11] = getDanger(map, x+3, y+1);
+      m_inputs[12] = getDanger(map, x+3, y);
+      m_inputs[13] = getDanger(map, x+3, y-1);
+      m_inputs[14] = getDanger(map, x+3, y-2);
       break;
     case 1:
       m_inputs[0] = getDanger(map, x+2, y+1);
@@ -161,6 +184,11 @@ public:
       m_inputs[7] = getDanger(map, x, y+2);
       m_inputs[8] = getDanger(map, x-1, y+2);
       m_inputs[9] = getDanger(map, x-2, y+2);
+      m_inputs[10] = getDanger(map, x+2, y+3);
+      m_inputs[11] = getDanger(map, x+1, y+3);
+      m_inputs[12] = getDanger(map, x, y+3);
+      m_inputs[13] = getDanger(map, x-1, y+3);
+      m_inputs[14] = getDanger(map, x-2, y+3);
       break;
     case 2:
       m_inputs[0] = getDanger(map, x-1, y+2);
@@ -173,6 +201,11 @@ public:
       m_inputs[7] = getDanger(map, x-2, y);
       m_inputs[8] = getDanger(map, x-2, y-1);
       m_inputs[9] = getDanger(map, x-2, y-2);
+      m_inputs[10] = getDanger(map, x-3, y+2);
+      m_inputs[11] = getDanger(map, x-3, y+1);
+      m_inputs[12] = getDanger(map, x-3, y);
+      m_inputs[13] = getDanger(map, x-3, y-1);
+      m_inputs[14] = getDanger(map, x-3, y-2);
       break;
     case 3:
       m_inputs[0] = getDanger(map, x+2, y-1);
@@ -185,8 +218,13 @@ public:
       m_inputs[7] = getDanger(map, x, y-2);
       m_inputs[8] = getDanger(map, x-1, y-2);
       m_inputs[9] = getDanger(map, x-2, y-2);
+      m_inputs[10] = getDanger(map, x+2, y-3);
+      m_inputs[11] = getDanger(map, x+1, y-3);
+      m_inputs[12] = getDanger(map, x, y-3);
+      m_inputs[13] = getDanger(map, x-1, y-3);
+      m_inputs[14] = getDanger(map, x-2, y-3);
       break;
-    }
+      }
   }
   
   void step() {
@@ -238,7 +276,7 @@ public:
     m_grow = false;
   }
   
-  void feed() { m_grow = true; m_food += 40;}
+  void feed() { m_grow = true; m_food = 50;}
   void kill() { m_alive = false; }
   bool isAlive() { return m_alive; }
   bool fork() { return m_fork; }
@@ -324,11 +362,9 @@ void collisions(std::list<Snake*>& snakes, std::list<Snake*>& deadSnakes, std::l
 	}
       else
 	for (auto& bodyPart : snake2->getBody()) {
-	  //if (snakeHead == bodyPart) continue;
 	  if (snakeHead[0] == bodyPart[0] &&
 	      snakeHead[1] == bodyPart[1]) {
 	    snake->kill();
-	    //	  exit(56);
 	    break;
 	  }
 	}
@@ -361,7 +397,7 @@ void sense(std::list<Snake*>& snakes, const int (&map)[mapSizeY][mapSizeX]) {
 }
 
 void foodGeneration(std::list<Food>& foods, int min, int max) {
-  if (foods.size() > 200) return;
+  if (foods.size() > 300) return;
   for (int rand = min + (min == max ? 0 : std::rand() % (max-min)); rand > 0; --rand)
     foods.push_back(Food(std::rand()%mapSizeX, std::rand()%mapSizeY));
 }
