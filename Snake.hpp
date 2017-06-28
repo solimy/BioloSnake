@@ -15,6 +15,7 @@ namespace BioloSnake {
   public:
     Snake(int x, int y);
     Snake(int x, int y, const Brain& brain);
+    ~Snake();
     void turnLeft();
     void turnRight();
     void sense(const int (&map)[mapSizeY][mapSizeX]);
@@ -33,8 +34,8 @@ namespace BioloSnake {
     int m_direction;
     bool m_grow;
     bool m_alive;
-    Brain m_brain;
-    SimpleEye m_eye;
+    Brain* m_brain;
+    SimpleEye* m_eye;
     int m_food;
     int m_age;
     bool m_fork;

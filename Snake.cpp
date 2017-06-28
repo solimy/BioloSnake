@@ -2,40 +2,42 @@
 
 #include "Snake.hpp"
 
-BioloSnake::Snake::Snake(int x, int y)
-  :
-  m_brain(15, 2)
-{
-  std::vector<int> posXY = {x, y};
-  m_body.push_back(posXY);
-  m_direction = std::rand() % 4;
-  m_grow = false;
-  m_alive = true;
-  m_brain.mutate();
-  m_food = 20;
-  m_age = 0;
-  m_fork = false;
-  m_outputs.push_back(0.0);
-  m_outputs.push_back(0.0);
+BioloSnake::Snake::~Snake() {
+  delete(m_eye);
+  delete(m_brain);
 }
 
-BioloSnake::Snake::Snake(int x, int y, const BioloSnake::Brain& brain)
-  :
-  m_eye(),
-  m_brain(15, 2)
-{
+BioloSnake::Snake::Snake(int x, int y) {
   std::vector<int> posXY = {x, y};
   m_body.push_back(posXY);
   m_direction = std::rand() % 4;
   m_grow = false;
   m_alive = true;
-  m_brain = brain;
-  m_brain.mutate();
+  m_eye = new SimpleEye(m_inputs);
+  m_outputs.push_back(0.0);
+  m_outputs.push_back(0.0);
+  m_brain = new Brain(m_inputs.size(), m_outputs.size());
+  m_brain->mutate();
   m_food = 20;
   m_age = 0;
   m_fork = false;
+}
+
+BioloSnake::Snake::Snake(int x, int y, const BioloSnake::Brain& brain) {
+  std::vector<int> posXY = {x, y};
+  m_body.push_back(posXY);
+  m_direction = std::rand() % 4;
+  m_grow = false;
+  m_alive = true;
+  m_eye = new SimpleEye(m_inputs);
   m_outputs.push_back(0.0);
   m_outputs.push_back(0.0);
+  m_brain = new Brain(m_inputs.size(), m_outputs.size());
+  *m_brain = brain;
+  m_brain->mutate();
+  m_food = 20;
+  m_age = 0;
+  m_fork = false;
 }
 
 void BioloSnake::Snake::turnLeft() {
@@ -47,7 +49,7 @@ void BioloSnake::Snake::turnRight() {
 }//std::cout << "turnRight" << std::endl;}
   
 void BioloSnake::Snake::sense(const int (&map)[mapSizeY][mapSizeX]) {
-  m_inputs = m_eye.sense(map, m_direction, m_body.front()[0], m_body.front()[1]);
+  m_eye->sense(map, m_direction, m_body.front()[0], m_body.front()[1]);
 }
   
 void BioloSnake::Snake::step() {
@@ -56,7 +58,7 @@ void BioloSnake::Snake::step() {
     return;
   }
   if (++m_age % 100 == 0) m_fork = true;
-  m_brain.process(m_inputs, m_outputs);
+  m_brain->process(m_inputs, m_outputs);
   if (m_outputs[0] > 0.9) turnLeft();
   if (m_outputs[1] > 0.9) turnRight();
   std::vector<int> pos = {0, 0};
@@ -124,7 +126,7 @@ const std::list< std::vector<int> >& BioloSnake::Snake::getBody() {
 }
 
 const BioloSnake::Brain& BioloSnake::Snake::getBrain() {
-  return m_brain;
+  return *m_brain;
 }
 
 void BioloSnake::Snake::dump() {

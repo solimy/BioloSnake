@@ -1,116 +1,111 @@
 #ifndef SENSOR_HPP_
 #define SENSOR_HPP_
 
+#include <list>
 #include <vector>
 
 namespace BioloSnake {
 
+  class SensorHub;
+  
   class Sensor {
 
   public:
-    virtual const std::vector<double>& sense() = 0;
-    static int size() {return 0;}
+    Sensor(int size, std::vector<double>& inputsHub)
+      :
+      m_sensed(inputsHub),
+      m_start_index(inputsHub.size()),
+      m_end_index(inputsHub.size() + size)
+    {
+      for (int i = m_start_index; i < m_end_index; ++i) inputsHub.push_back(0.0);
+    }
+    void sense() {};
   protected:
-    std::vector<double> m_sensed;
+    std::vector<double>& m_sensed;
+    const int m_start_index;
+    const int m_end_index;
   };
-
-  class SimpleEye : Sensor {
+  
+  class SimpleEye : public Sensor {
     
   public:
-    static int size() {return 15;}
-    SimpleEye() {
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
-      m_sensed.push_back(0.0);
+    SimpleEye(std::vector<double>& inputsHub) : Sensor(15, inputsHub) {
     }
     
-    const std::vector<double>& sense(const int (&map)[mapSizeY][mapSizeX], int direction, int x, int y) {
+    void sense(const int (&map)[mapSizeY][mapSizeX], int direction, int x, int y) {
       switch (direction) {
       case 0:
-	m_sensed[0] = getDanger(map, x+1, y+2);
-	m_sensed[1] = getDanger(map, x+1, y+1);
-	m_sensed[2] = getDanger(map, x+1, y);
-	m_sensed[3] = getDanger(map, x+1, y-1);
-	m_sensed[4] = getDanger(map, x+1, y-2);
-	m_sensed[5] = getDanger(map, x+2, y+2);
-	m_sensed[6] = getDanger(map, x+2, y+1);
-	m_sensed[7] = getDanger(map, x+2, y);
-	m_sensed[8] = getDanger(map, x+2, y-1);
-	m_sensed[9] = getDanger(map, x+2, y-2);
-	m_sensed[10] = getDanger(map, x+3, y+2);
-	m_sensed[11] = getDanger(map, x+3, y+1);
-	m_sensed[12] = getDanger(map, x+3, y);
-	m_sensed[13] = getDanger(map, x+3, y-1);
-	m_sensed[14] = getDanger(map, x+3, y-2);
+	m_sensed[m_start_index+0] = getDanger(map, x+1, y+2);
+	m_sensed[m_start_index+1] = getDanger(map, x+1, y+1);
+	m_sensed[m_start_index+2] = getDanger(map, x+1, y);
+	m_sensed[m_start_index+3] = getDanger(map, x+1, y-1);
+	m_sensed[m_start_index+4] = getDanger(map, x+1, y-2);
+	m_sensed[m_start_index+5] = getDanger(map, x+2, y+2);
+	m_sensed[m_start_index+6] = getDanger(map, x+2, y+1);
+	m_sensed[m_start_index+7] = getDanger(map, x+2, y);
+	m_sensed[m_start_index+8] = getDanger(map, x+2, y-1);
+	m_sensed[m_start_index+9] = getDanger(map, x+2, y-2);
+	m_sensed[m_start_index+10] = getDanger(map, x+3, y+2);
+	m_sensed[m_start_index+11] = getDanger(map, x+3, y+1);
+	m_sensed[m_start_index+12] = getDanger(map, x+3, y);
+	m_sensed[m_start_index+13] = getDanger(map, x+3, y-1);
+	m_sensed[m_start_index+14] = getDanger(map, x+3, y-2);
 	break;
       case 1:
-	m_sensed[0] = getDanger(map, x+2, y+1);
-	m_sensed[1] = getDanger(map, x+1, y+1);
-	m_sensed[2] = getDanger(map, x, y+1);
-	m_sensed[3] = getDanger(map, x-1, y+1);
-	m_sensed[4] = getDanger(map, x-2, y+1);
-	m_sensed[5] = getDanger(map, x+2, y+2);
-	m_sensed[6] = getDanger(map, x+1, y+2);
-	m_sensed[7] = getDanger(map, x, y+2);
-	m_sensed[8] = getDanger(map, x-1, y+2);
-	m_sensed[9] = getDanger(map, x-2, y+2);
-	m_sensed[10] = getDanger(map, x+2, y+3);
-	m_sensed[11] = getDanger(map, x+1, y+3);
-	m_sensed[12] = getDanger(map, x, y+3);
-	m_sensed[13] = getDanger(map, x-1, y+3);
-	m_sensed[14] = getDanger(map, x-2, y+3);
+	m_sensed[m_start_index+0] = getDanger(map, x+2, y+1);
+	m_sensed[m_start_index+1] = getDanger(map, x+1, y+1);
+	m_sensed[m_start_index+2] = getDanger(map, x, y+1);
+	m_sensed[m_start_index+3] = getDanger(map, x-1, y+1);
+	m_sensed[m_start_index+4] = getDanger(map, x-2, y+1);
+	m_sensed[m_start_index+5] = getDanger(map, x+2, y+2);
+	m_sensed[m_start_index+6] = getDanger(map, x+1, y+2);
+	m_sensed[m_start_index+7] = getDanger(map, x, y+2);
+	m_sensed[m_start_index+8] = getDanger(map, x-1, y+2);
+	m_sensed[m_start_index+9] = getDanger(map, x-2, y+2);
+	m_sensed[m_start_index+10] = getDanger(map, x+2, y+3);
+	m_sensed[m_start_index+11] = getDanger(map, x+1, y+3);
+	m_sensed[m_start_index+12] = getDanger(map, x, y+3);
+	m_sensed[m_start_index+13] = getDanger(map, x-1, y+3);
+	m_sensed[m_start_index+14] = getDanger(map, x-2, y+3);
 	break;
       case 2:
-	m_sensed[0] = getDanger(map, x-1, y+2);
-	m_sensed[1] = getDanger(map, x-1, y+1);
-	m_sensed[2] = getDanger(map, x-1, y);
-	m_sensed[3] = getDanger(map, x-1, y-1);
-	m_sensed[4] = getDanger(map, x-1, y-2);
-	m_sensed[5] = getDanger(map, x-2, y+2);
-	m_sensed[6] = getDanger(map, x-2, y+1);
-	m_sensed[7] = getDanger(map, x-2, y);
-	m_sensed[8] = getDanger(map, x-2, y-1);
-	m_sensed[9] = getDanger(map, x-2, y-2);
-	m_sensed[10] = getDanger(map, x-3, y+2);
-	m_sensed[11] = getDanger(map, x-3, y+1);
-	m_sensed[12] = getDanger(map, x-3, y);
-	m_sensed[13] = getDanger(map, x-3, y-1);
-	m_sensed[14] = getDanger(map, x-3, y-2);
+	m_sensed[m_start_index+0] = getDanger(map, x-1, y+2);
+	m_sensed[m_start_index+1] = getDanger(map, x-1, y+1);
+	m_sensed[m_start_index+2] = getDanger(map, x-1, y);
+	m_sensed[m_start_index+3] = getDanger(map, x-1, y-1);
+	m_sensed[m_start_index+4] = getDanger(map, x-1, y-2);
+	m_sensed[m_start_index+5] = getDanger(map, x-2, y+2);
+	m_sensed[m_start_index+6] = getDanger(map, x-2, y+1);
+	m_sensed[m_start_index+7] = getDanger(map, x-2, y);
+	m_sensed[m_start_index+8] = getDanger(map, x-2, y-1);
+	m_sensed[m_start_index+9] = getDanger(map, x-2, y-2);
+	m_sensed[m_start_index+10] = getDanger(map, x-3, y+2);
+	m_sensed[m_start_index+11] = getDanger(map, x-3, y+1);
+	m_sensed[m_start_index+12] = getDanger(map, x-3, y);
+	m_sensed[m_start_index+13] = getDanger(map, x-3, y-1);
+	m_sensed[m_start_index+14] = getDanger(map, x-3, y-2);
 	break;
       case 3:
-	m_sensed[0] = getDanger(map, x+2, y-1);
-	m_sensed[1] = getDanger(map, x+1, y-1);
-	m_sensed[2] = getDanger(map, x, y-1);
-	m_sensed[3] = getDanger(map, x-1, y-1);
-	m_sensed[4] = getDanger(map, x-2, y-1);
-	m_sensed[5] = getDanger(map, x+2, y-2);
-	m_sensed[6] = getDanger(map, x+1, y-2);
-	m_sensed[7] = getDanger(map, x, y-2);
-	m_sensed[8] = getDanger(map, x-1, y-2);
-	m_sensed[9] = getDanger(map, x-2, y-2);
-	m_sensed[10] = getDanger(map, x+2, y-3);
-	m_sensed[11] = getDanger(map, x+1, y-3);
-	m_sensed[12] = getDanger(map, x, y-3);
-	m_sensed[13] = getDanger(map, x-1, y-3);
-	m_sensed[14] = getDanger(map, x-2, y-3);
+	m_sensed[m_start_index+0] = getDanger(map, x+2, y-1);
+	m_sensed[m_start_index+1] = getDanger(map, x+1, y-1);
+	m_sensed[m_start_index+2] = getDanger(map, x, y-1);
+	m_sensed[m_start_index+3] = getDanger(map, x-1, y-1);
+	m_sensed[m_start_index+4] = getDanger(map, x-2, y-1);
+	m_sensed[m_start_index+5] = getDanger(map, x+2, y-2);
+	m_sensed[m_start_index+6] = getDanger(map, x+1, y-2);
+	m_sensed[m_start_index+7] = getDanger(map, x, y-2);
+	m_sensed[m_start_index+8] = getDanger(map, x-1, y-2);
+	m_sensed[m_start_index+9] = getDanger(map, x-2, y-2);
+	m_sensed[m_start_index+10] = getDanger(map, x+2, y-3);
+	m_sensed[m_start_index+11] = getDanger(map, x+1, y-3);
+	m_sensed[m_start_index+12] = getDanger(map, x, y-3);
+	m_sensed[m_start_index+13] = getDanger(map, x-1, y-3);
+	m_sensed[m_start_index+14] = getDanger(map, x-2, y-3);
 	break;
       }
-      return m_sensed;
     }
   private:
-    const std::vector<double>& sense() {}
+    void sense() {}
 
     double getDanger(const int (&map)[mapSizeY][mapSizeX], int x, int y) {
       //x = x >= mapSizeX ? 0 : x < 0 ? mapSizeX-1 : x;
