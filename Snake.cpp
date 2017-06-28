@@ -2,63 +2,40 @@
 
 #include "Snake.hpp"
 
-BioloSnake::Snake::Snake(int x, int y) {
+BioloSnake::Snake::Snake(int x, int y)
+  :
+  m_brain(15, 2)
+{
   std::vector<int> posXY = {x, y};
   m_body.push_back(posXY);
   m_direction = std::rand() % 4;
   m_grow = false;
   m_alive = true;
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_outputs.push_back(0.0);
-  m_outputs.push_back(0.0);
   m_brain.mutate();
   m_food = 20;
   m_age = 0;
   m_fork = false;
+  m_outputs.push_back(0.0);
+  m_outputs.push_back(0.0);
 }
 
-BioloSnake::Snake::Snake(int x, int y, const BioloSnake::Brain& brain) {
+BioloSnake::Snake::Snake(int x, int y, const BioloSnake::Brain& brain)
+  :
+  m_eye(),
+  m_brain(15, 2)
+{
   std::vector<int> posXY = {x, y};
   m_body.push_back(posXY);
   m_direction = std::rand() % 4;
   m_grow = false;
   m_alive = true;
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_inputs.push_back(0.0);
-  m_outputs.push_back(0.0);
-  m_outputs.push_back(0.0);
   m_brain = brain;
   m_brain.mutate();
   m_food = 20;
   m_age = 0;
   m_fork = false;
+  m_outputs.push_back(0.0);
+  m_outputs.push_back(0.0);
 }
 
 void BioloSnake::Snake::turnLeft() {
@@ -68,89 +45,9 @@ void BioloSnake::Snake::turnLeft() {
 void BioloSnake::Snake::turnRight() {
   m_direction = m_direction == 3 ? 0 : m_direction + 1;
 }//std::cout << "turnRight" << std::endl;}
-
-double BioloSnake::Snake::getDanger(const int (&map)[mapSizeY][mapSizeX], int x, int y) {
-  //x = x >= mapSizeX ? 0 : x < 0 ? mapSizeX-1 : x;
-  //y = y >= mapSizeY ? 0 : y < 0 ? mapSizeY-1 : y;
-  if (x >= mapSizeX || x < 0 || y >= mapSizeY || y < 0) return -1.0;
-  else if (map[y][x]=='#') return -1.0;
-  else if (map[y][x]=='.') return 1.0;
-  else return 0.0;
-}
   
 void BioloSnake::Snake::sense(const int (&map)[mapSizeY][mapSizeX]) {
-  int x = m_body.front()[0];
-  int y = m_body.front()[1];
-  switch (m_direction) {
-  case 0:
-    m_inputs[0] = getDanger(map, x+1, y+2);
-    m_inputs[1] = getDanger(map, x+1, y+1);
-    m_inputs[2] = getDanger(map, x+1, y);
-    m_inputs[3] = getDanger(map, x+1, y-1);
-    m_inputs[4] = getDanger(map, x+1, y-2);
-    m_inputs[5] = getDanger(map, x+2, y+2);
-    m_inputs[6] = getDanger(map, x+2, y+1);
-    m_inputs[7] = getDanger(map, x+2, y);
-    m_inputs[8] = getDanger(map, x+2, y-1);
-    m_inputs[9] = getDanger(map, x+2, y-2);
-    m_inputs[10] = getDanger(map, x+3, y+2);
-    m_inputs[11] = getDanger(map, x+3, y+1);
-    m_inputs[12] = getDanger(map, x+3, y);
-    m_inputs[13] = getDanger(map, x+3, y-1);
-    m_inputs[14] = getDanger(map, x+3, y-2);
-    break;
-  case 1:
-    m_inputs[0] = getDanger(map, x+2, y+1);
-    m_inputs[1] = getDanger(map, x+1, y+1);
-    m_inputs[2] = getDanger(map, x, y+1);
-    m_inputs[3] = getDanger(map, x-1, y+1);
-    m_inputs[4] = getDanger(map, x-2, y+1);
-    m_inputs[5] = getDanger(map, x+2, y+2);
-    m_inputs[6] = getDanger(map, x+1, y+2);
-    m_inputs[7] = getDanger(map, x, y+2);
-    m_inputs[8] = getDanger(map, x-1, y+2);
-    m_inputs[9] = getDanger(map, x-2, y+2);
-    m_inputs[10] = getDanger(map, x+2, y+3);
-    m_inputs[11] = getDanger(map, x+1, y+3);
-    m_inputs[12] = getDanger(map, x, y+3);
-    m_inputs[13] = getDanger(map, x-1, y+3);
-    m_inputs[14] = getDanger(map, x-2, y+3);
-    break;
-  case 2:
-    m_inputs[0] = getDanger(map, x-1, y+2);
-    m_inputs[1] = getDanger(map, x-1, y+1);
-    m_inputs[2] = getDanger(map, x-1, y);
-    m_inputs[3] = getDanger(map, x-1, y-1);
-    m_inputs[4] = getDanger(map, x-1, y-2);
-    m_inputs[5] = getDanger(map, x-2, y+2);
-    m_inputs[6] = getDanger(map, x-2, y+1);
-    m_inputs[7] = getDanger(map, x-2, y);
-    m_inputs[8] = getDanger(map, x-2, y-1);
-    m_inputs[9] = getDanger(map, x-2, y-2);
-    m_inputs[10] = getDanger(map, x-3, y+2);
-    m_inputs[11] = getDanger(map, x-3, y+1);
-    m_inputs[12] = getDanger(map, x-3, y);
-    m_inputs[13] = getDanger(map, x-3, y-1);
-    m_inputs[14] = getDanger(map, x-3, y-2);
-    break;
-  case 3:
-    m_inputs[0] = getDanger(map, x+2, y-1);
-    m_inputs[1] = getDanger(map, x+1, y-1);
-    m_inputs[2] = getDanger(map, x, y-1);
-    m_inputs[3] = getDanger(map, x-1, y-1);
-    m_inputs[4] = getDanger(map, x-2, y-1);
-    m_inputs[5] = getDanger(map, x+2, y-2);
-    m_inputs[6] = getDanger(map, x+1, y-2);
-    m_inputs[7] = getDanger(map, x, y-2);
-    m_inputs[8] = getDanger(map, x-1, y-2);
-    m_inputs[9] = getDanger(map, x-2, y-2);
-    m_inputs[10] = getDanger(map, x+2, y-3);
-    m_inputs[11] = getDanger(map, x+1, y-3);
-    m_inputs[12] = getDanger(map, x, y-3);
-    m_inputs[13] = getDanger(map, x-1, y-3);
-    m_inputs[14] = getDanger(map, x-2, y-3);
-    break;
-  }
+  m_inputs = m_eye.sense(map, m_direction, m_body.front()[0], m_body.front()[1]);
 }
   
 void BioloSnake::Snake::step() {

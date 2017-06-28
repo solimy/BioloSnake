@@ -10,7 +10,7 @@ namespace BioloSnake {
 
   class Brain : public NeuralNetwork::MLP {
   public:
-    Brain();
+    Brain(int inputs, int outputs);
     void mutate();
   private:
   };

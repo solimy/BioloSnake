@@ -6,6 +6,7 @@
 
 #include "Global.h"
 #include "Brain.hpp"
+#include "Sensor.hpp"
 
 namespace BioloSnake {
 
@@ -16,7 +17,6 @@ namespace BioloSnake {
     Snake(int x, int y, const Brain& brain);
     void turnLeft();
     void turnRight();
-    double getDanger(const int (&map)[mapSizeY][mapSizeX], int x, int y);
     void sense(const int (&map)[mapSizeY][mapSizeX]);
     void step();
     void feed();
@@ -34,6 +34,7 @@ namespace BioloSnake {
     bool m_grow;
     bool m_alive;
     Brain m_brain;
+    SimpleEye m_eye;
     int m_food;
     int m_age;
     bool m_fork;
