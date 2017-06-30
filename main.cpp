@@ -52,6 +52,9 @@ void collisions(std::list<BioloSnake::Snake*>& snakes, std::list<BioloSnake::Sna
     }
     
     for (auto& snake2 : snakes) {
+      #ifndef DEADLY_COLLISIONS
+      break;
+      #endif
       if (snake->isAlive() == false) break;
       if (snake == snake2)
 	for (auto bodyPartIt = snake2->getBody().begin(); bodyPartIt != snake2->getBody().end(); ++bodyPartIt) {
@@ -94,7 +97,9 @@ void move(std::list<BioloSnake::Snake*>& snakes) {
 
 void sense(std::list<BioloSnake::Snake*>& snakes, std::list<Food>& foods, const int (&map)[mapSizeY][mapSizeX]) {
   for (auto& snake : snakes) {
+    #ifdef DEADLY_COLLISIONS
     snake->sense(map);
+    #endif
     snake->sense(foods);
   }
 }
@@ -144,9 +149,13 @@ int main(int ac, char**av) {
 
   snakeGeneration(snakes, 30, 30);
   //no display train
+  #ifndef DEBUG
   std::cout << "\033[2J" << std::flush;
-  for (int i = 0, imax = (ac == 2 ? std::atoi(av[1]) : 1000); i < imax; ++i) {    
+  #endif
+  for (int i = 0, imax = (ac == 2 ? std::atoi(av[1]) : 1000); i < imax; ++i) {
+    #ifndef DEBUG
     std::cout << "\033[2J\033[0;0f\033[s" << std::flush;
+    #endif
     std::cout << "epoch: " << i << "/" << imax << std::endl;
     foodGeneration(foods, 10, 100);
     collisions(snakes, deadSnakes, foods);

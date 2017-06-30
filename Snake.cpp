@@ -3,7 +3,9 @@
 #include "Snake.hpp"
 
 BioloSnake::Snake::~Snake() {
+  #ifdef DEADLY_COLLISIONS
   delete(m_eye);
+  #endif
   delete(m_fsLeft);
   delete(m_fsRight);
   delete(m_brain);
@@ -15,7 +17,9 @@ BioloSnake::Snake::Snake(int x, int y) {
   m_direction = std::rand() % 4;
   m_grow = false;
   m_alive = true;
+  #ifdef DEADLY_COLLISIONS
   m_eye = new SimpleEye(m_inputs);
+  #endif
   m_fsLeft = new FoodSensor(m_inputs);
   m_fsRight = new FoodSensor(m_inputs);
   m_outputs.push_back(0.0);
@@ -33,7 +37,9 @@ BioloSnake::Snake::Snake(int x, int y, const BioloSnake::Brain& brain) {
   m_direction = std::rand() % 4;
   m_grow = false;
   m_alive = true;
+  #ifdef DEADLY_COLLISIONS
   m_eye = new SimpleEye(m_inputs);
+  #endif
   m_fsLeft = new FoodSensor(m_inputs);
   m_fsRight = new FoodSensor(m_inputs);
   m_outputs.push_back(0.0);
@@ -94,21 +100,29 @@ void BioloSnake::Snake::step() {
   case 1:
     pos[0] = m_body.front()[0];
     pos[1] = m_body.front()[1] + 1;
-    //pos[1] = pos[1] >= mapSizeY ? 0 : pos[1];
+    #ifndef DEADLY_COLLISIONS
+    pos[1] = pos[1] >= mapSizeY ? 0 : pos[1];
+    #endif
     break;
   case 3:
     pos[0] = m_body.front()[0];
     pos[1] = m_body.front()[1] - 1;
-    //pos[1] = pos[1] < 0 ? mapSizeY-1 : pos[1];
+    #ifndef DEADLY_COLLISIONS
+    pos[1] = pos[1] < 0 ? mapSizeY-1 : pos[1];
+    #endif
     break;
   case 2:
     pos[0] = m_body.front()[0] - 1;
-    //pos[0] = pos[0] < 0 ? mapSizeX-1 : pos[0];
+    #ifndef DEADLY_COLLISIONS
+    pos[0] = pos[0] < 0 ? mapSizeX-1 : pos[0];
+    #endif
     pos[1] = m_body.front()[1];
     break;
   case 0:
     pos[0] = m_body.front()[0] + 1;
-    //pos[0] = pos[0] >= mapSizeX ? 0 : pos[0];
+    #ifndef DEADLY_COLLISIONS
+    pos[0] = pos[0] >= mapSizeX ? 0 : pos[0];
+    #endif
     pos[1] = m_body.front()[1];
     break;
   }
