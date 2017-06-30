@@ -119,8 +119,7 @@ namespace BioloSnake {
       //y = y >= mapSizeY ? 0 : y < 0 ? mapSizeY-1 : y;
       if (x >= mapSizeX || x < 0 || y >= mapSizeY || y < 0) return -1.0;
       else if (map[y][x]=='#') return -1.0;
-      else if (map[y][x]=='.') return 1.0;
-      else return 0.0;
+      else return 1.0;
     }
   };
 
