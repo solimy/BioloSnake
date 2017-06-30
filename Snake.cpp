@@ -129,7 +129,7 @@ void BioloSnake::Snake::step() {
 }
   
 void BioloSnake::Snake::feed() {
-  m_grow = true; m_food = 50;
+  m_grow = true; m_food = 40;
 }
 
 void BioloSnake::Snake::kill() {
