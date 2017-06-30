@@ -105,7 +105,7 @@ void sense(std::list<BioloSnake::Snake*>& snakes, std::list<Food>& foods, const 
 }
 
 void foodGeneration(std::list<Food>& foods, int min, int max) {
-  if (foods.size() > 300) return;
+  if (foods.size() > 100) return;
   for (int rand = min + (min == max ? 0 : std::rand() % (max-min)); rand > 0; --rand)
     foods.push_back(Food(std::rand()%mapSizeX, std::rand()%mapSizeY));
 }

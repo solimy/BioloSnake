@@ -26,7 +26,7 @@ BioloSnake::Snake::Snake(int x, int y) {
   m_outputs.push_back(0.0);
   m_brain = new Brain(m_inputs.size(), m_outputs.size());
   m_brain->mutate();
-  m_food = 20;
+  m_food = 100;
   m_age = 0;
   m_fork = false;
 }
@@ -47,7 +47,7 @@ BioloSnake::Snake::Snake(int x, int y, const BioloSnake::Brain& brain) {
   m_brain = new Brain(m_inputs.size(), m_outputs.size());
   *m_brain = brain;
   m_brain->mutate();
-  m_food = 20;
+  m_food = 100;
   m_age = 0;
   m_fork = false;
 }
@@ -143,7 +143,7 @@ void BioloSnake::Snake::step() {
 }
   
 void BioloSnake::Snake::feed() {
-  m_grow = true; m_food = 40;
+  m_grow = true; m_food = 100;
 }
 
 void BioloSnake::Snake::kill() {
