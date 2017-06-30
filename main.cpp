@@ -92,9 +92,10 @@ void move(std::list<BioloSnake::Snake*>& snakes) {
   }
 }
 
-void sense(std::list<BioloSnake::Snake*>& snakes, const int (&map)[mapSizeY][mapSizeX]) {
+void sense(std::list<BioloSnake::Snake*>& snakes, std::list<Food>& foods, const int (&map)[mapSizeY][mapSizeX]) {
   for (auto& snake : snakes) {
     snake->sense(map);
+    snake->sense(foods);
   }
 }
 
@@ -152,7 +153,7 @@ int main(int ac, char**av) {
     while (snakes.size() > 0) {
       foodGeneration(foods, 1, 2);
       display(map, snakes, foods, false);
-      sense(snakes, map);
+      sense(snakes, foods, map);
       move(snakes);
       collisions(snakes, deadSnakes, foods);
       //    snakeGeneration(snakes, 1, 1);
@@ -169,7 +170,7 @@ int main(int ac, char**av) {
     while (snakes.size() > 0) {
       foodGeneration(foods, 1, 2);
       display(map, snakes, foods, true);
-      sense(snakes, map);
+      sense(snakes, foods, map);
       move(snakes);
       collisions(snakes, deadSnakes, foods);
       //    snakeGeneration(snakes, 1, 1);
