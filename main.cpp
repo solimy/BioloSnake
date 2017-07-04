@@ -131,6 +131,7 @@ void cloneBestDeadSnake(std::list<BioloSnake::Snake*>& snakes, std::list<BioloSn
   for (int i = 0; i < 30; ++i) {
     snakes.push_back(new BioloSnake::Snake(std::rand()%mapSizeX, std::rand()%mapSizeY, deadSnakes.front()->getBrain()));
   }
+  deadSnakes.front()->resurrection();
   snakes.push_back(deadSnakes.front());
   deadSnakes.pop_front();
   for (std::list<BioloSnake::Snake*>::iterator it = deadSnakes.begin(); it != deadSnakes.end();) {
