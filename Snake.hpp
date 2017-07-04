@@ -23,6 +23,7 @@ namespace BioloSnake {
     void step();
     void feed();
     void kill();
+    void resurrection();
     bool isAlive();
     bool fork();
     int getAge();

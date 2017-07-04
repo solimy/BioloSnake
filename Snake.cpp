@@ -150,6 +150,13 @@ void BioloSnake::Snake::kill() {
   m_alive = false;
 }
 
+void BioloSnake::Snake::resurrection() {
+  m_alive = true;
+  m_food = 100;
+  while (m_body.size() > 1)
+    m_body.pop_back();
+}
+
 bool BioloSnake::Snake::isAlive() {
   return m_alive;
 }
