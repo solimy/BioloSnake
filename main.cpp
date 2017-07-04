@@ -182,8 +182,6 @@ int main(int ac, char**av) {
       sense(snakes, foods, map);
       move(snakes);
       collisions(snakes, deadSnakes, foods);
-      //    snakeGeneration(snakes, 1, 1);
-      //birth(snakes);
       std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
     cloneBestDeadSnake(snakes, deadSnakes);

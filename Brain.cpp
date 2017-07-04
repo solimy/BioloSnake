@@ -1,17 +1,14 @@
 #include "Brain.hpp"
 
-BioloSnake::Brain::Brain(int inputs, int outputs) : NeuralNetwork::MLP(4) {
+BioloSnake::Brain::Brain(int inputs, int outputs) : NeuralNetwork::MLP(3) {
   for (int i = 0; i < inputs; ++i)
     addNeuron(0);
 
   for (int i = 0; i < inputs; ++i)
     addNeuron(1);
 
-  for (int i = 0; i < inputs / 2; ++i)
-    addNeuron(2);
-
   for (int i = 0; i < outputs; ++i)
-    addNeuron(3);
+    addNeuron(2);
 }
 
 void BioloSnake::Brain::mutate() {
