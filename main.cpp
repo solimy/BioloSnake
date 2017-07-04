@@ -166,8 +166,6 @@ int main(int ac, char**av) {
       sense(snakes, foods, map);
       move(snakes);
       collisions(snakes, deadSnakes, foods);
-      //    snakeGeneration(snakes, 1, 1);
-      //birth(snakes);
     }
     cloneBestDeadSnake(snakes, deadSnakes);
   }
